@@ -100,8 +100,7 @@ def main(SheetName):
 #----------------------------------------------------------------
 
 #------------------- color matrix --------------------------------
-    color = ["00000000","00FFFFFF","00FF0000","0000FF00","000000FF",
-             "00FFFF00","00FF00FF","0000FFFF","00000000","00FFFFFF",
+    color = ["00000000","00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF","00000000",
               "00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF",
               "0000FFFF","00800000","00008000","00000080","00808000",
               "00800080","00008080","00C0C0C0","00808080","009999FF",
@@ -138,12 +137,20 @@ def main(SheetName):
             else:
                 print("??")
             round+=1
-        print(dict)
-                        
-                
-                    
-                
-            #print(cell.value)
+        start_hour = timer.index(dict["Start"])+2
+        end_hour = timer.index(dict["End"])+3
+        Fill = PatternFill(start_color=color[use_color],end_color=color[use_color],fill_type="solid")
+        for i in range(start_hour, end_hour):
+            if dict["Tool"] == "Blending":
+                if i == start_hour:
+                    ws.cell(row=3,column=i,value=dict["P_Name"]).fill=Fill
+                else:
+                    ws.cell(row=3,column=i).fill=Fill
+            else:
+                if i == start_hour:
+                    ws.cell(row=5,column=i,value=dict["P_Name"]).fill=Fill
+                else:
+                    ws.cell(row=5,column=i).fill=Fill
     
     ##ws["B1"]="Hello Python"
     #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
