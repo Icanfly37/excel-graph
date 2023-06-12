@@ -59,19 +59,19 @@ def gen_letter(max_letter = "AY"):
                 count+=1
     return l
 
-def main(SheetName):
+def main(FileName,Sheet):
 #------------------- open excel file --------------------------------
     try:
-        wb = load_workbook(SheetName)
+        wb = load_workbook(FileName) #use out
     except FileNotFoundError:
         print("Sheet not found")
 #----------------------------------------------------------------
 
 #------------------- access sheet or create sheet --------------------------------    
-    if "graph" in wb.sheetnames:
-        ws = wb["graph"]
+    if "graph  Timing"+Sheet in wb.sheetnames:
+        ws = wb["graph  Timing"+Sheet]
     else:
-        ws = wb.create_sheet("graph")
+        ws = wb.create_sheet("graph  Timing"+Sheet)
 #----------------------------------------------------------------
 
 #------------------- generate time --------------------------------
@@ -112,7 +112,7 @@ def main(SheetName):
 #----------------------------------------------------------------
 
 #------------------- Ploting in sheet --------------------------------
-    wsr = wb["ABB1"]
+    wsr = wb[Sheet] #use out
     #letter = gen_letter()
     for r in wsr.iter_rows(min_row=2):  # Start from the second row
         use_color = random.randint(0,len(color)-1)
@@ -159,9 +159,9 @@ def main(SheetName):
       
 #------------------- save excel file --------------------------------      
     try:
-        wb.save(SheetName)
+        wb.save(FileName)
     except PermissionError:
         print("Please, Close the Workbook before continuing")
 #----------------------------------------------------------------
 
-main("PyDSheet.xlsx")
+main("PyDSheet.xlsx","ABB1") #File_Name and Sheet_Name
