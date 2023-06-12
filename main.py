@@ -29,6 +29,29 @@ def time_cal(start_hour,end_hour,start_min,end_min):
         l = gentime(l,0,end_hour+1,1,start_min,end_min+1,30)
     return l
 
+def gen_letter(max_letter = "AY"):
+    ascii_value = 65 
+    to_Z = False
+    count = 0 #max = 51 #mid = 26
+    letter = ""
+    while True:
+        if letter == max_letter:
+            to_Z = False
+            break
+        if ascii_value == 91:
+            ascii_value = 65
+            to_Z = True
+        else:
+            if to_Z == True:
+                letter = "A"+chr(ascii_value)
+                print(letter, end=" ")
+                ascii_value+=1
+                count+=1
+            else:
+                letter = chr(ascii_value)
+                print(letter, end=" ")
+                ascii_value+=1
+                count+=1
 
 def main(SheetName):
 #------------------- open excel file --------------------------------
@@ -43,11 +66,6 @@ def main(SheetName):
         ws = wb["graph"]
     else:
         ws = wb.create_sheet("graph")
-#----------------------------------------------------------------
-
-#------------------- generate A-Z matrix --------------------------------
-    #az = list(string.ascii_uppercase) # 0 = A ---- len-1(25) = Z -- len = 26
-    #col_time = 0
 #----------------------------------------------------------------
 
 #------------------- generate time --------------------------------
@@ -70,7 +88,13 @@ def main(SheetName):
             round-=1
 #----------------------------------------------------------------   
 
-#------------------- Do something in sheet --------------------------------
+#------------------- generate A-Z matrix --------------------------------
+    #col_time = 0
+#----------------------------------------------------------------
+
+#------------------- Ploting in sheet --------------------------------
+        
+            
     ##ws["B1"]="Hello Python"
     #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
     #    time = "0:00"
