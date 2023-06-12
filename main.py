@@ -113,10 +113,6 @@ def main(SheetName):
 
 #------------------- Ploting in sheet --------------------------------
     wsr = wb["ABB1"]
-    mark = 3
-    current = ""
-    fill = 1
-    col = 2
     #letter = gen_letter()
     for r in wsr.iter_rows(min_row=2):  # Start from the second row
         use_color = random.randint(0,len(color)-1)
