@@ -1,5 +1,9 @@
 from openpyxl import *
+from openpyxl.styles import PatternFill
+from datetime import datetime
+
 import string
+import random
 
 
 def gentime(l,start_hour,stop_hour,step_hour,start_minute,stop_minute,step_minute):
@@ -30,6 +34,7 @@ def time_cal(start_hour,end_hour,start_min,end_min):
     return l
 
 def gen_letter(max_letter = "AY"):
+    l = []
     ascii_value = 65 
     to_Z = False
     count = 0 #max = 51 #mid = 26
@@ -44,14 +49,15 @@ def gen_letter(max_letter = "AY"):
         else:
             if to_Z == True:
                 letter = "A"+chr(ascii_value)
-                print(letter, end=" ")
+                l.append(letter)
                 ascii_value+=1
                 count+=1
             else:
                 letter = chr(ascii_value)
-                print(letter, end=" ")
+                l.append(letter)
                 ascii_value+=1
                 count+=1
+    return l
 
 def main(SheetName):
 #------------------- open excel file --------------------------------
@@ -88,13 +94,57 @@ def main(SheetName):
             round-=1
 #----------------------------------------------------------------   
 
-#------------------- generate A-Z matrix --------------------------------
-    #col_time = 0
+##------------------- generate Tools --------------------------------
+    ws.cell(row=3,column=1,value="Blending")
+    ws.cell(row=5,column=1,value="Circulate")
+#----------------------------------------------------------------
+
+#------------------- color matrix --------------------------------
+    color = ["00000000","00FFFFFF","00FF0000","0000FF00","000000FF",
+             "00FFFF00","00FF00FF","0000FFFF","00000000","00FFFFFF",
+              "00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF",
+              "0000FFFF","00800000","00008000","00000080","00808000",
+              "00800080","00008080","00C0C0C0","00808080","009999FF",
+              "00993366","00FFFFCC","00CCFFFF","00660066","00FF8080",
+              "000066CC","00CCCCFF","00000080","00FF00FF","00FFFF00",
+              "0000FFFF","00800080","00800000","00008080","000000FF",
+              "0000CCFF","00CCFFFF","00CCFFCC","00FFFF99","0099CCFF",
+              "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC",
+              "0099CC00","00FFCC00","00FF9900","00FF6600","00666699",
+              "00969696","00003366","00339966","00003300","00333300",
+              "00993300","00993366","00333399","00333333"]
 #----------------------------------------------------------------
 
 #------------------- Ploting in sheet --------------------------------
-        
-            
+    wsr = wb["ABB1"]
+    mark = 3
+    current = ""
+    fill = 1
+    col = 2
+    #letter = gen_letter()
+    for r in wsr.iter_rows(min_row=2):  # Start from the second row
+        use_color = random.randint(0,len(color)-1)
+        round = 1
+        dict ={} #Tool(Blending or Circulate), P_Name, Start, End
+        for cell in r:
+            if round == 1:
+                dict["Tool"] = cell.value
+            elif round == 2:
+                dict["P_Name"] = cell.value
+            elif round == 3:
+                dict["Start"] = cell.value.strftime("%H:%M")
+            elif round == 4:
+                dict["End"] = cell.value.strftime("%H:%M")
+            else:
+                print("??")
+            round+=1
+        print(dict)
+                        
+                
+                    
+                
+            #print(cell.value)
+    
     ##ws["B1"]="Hello Python"
     #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
     #    time = "0:00"
