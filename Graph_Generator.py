@@ -59,7 +59,7 @@ def gen_letter(max_letter = "AY"):
                 count+=1
     return l
 
-def main(FileName,Sheet):
+def Poc(FileName,Sheet):
 #------------------- open excel file --------------------------------
     try:
         wb = load_workbook(FileName) #use out
@@ -68,10 +68,10 @@ def main(FileName,Sheet):
 #----------------------------------------------------------------
 
 #------------------- access sheet or create sheet --------------------------------    
-    if "graph  Timing"+Sheet in wb.sheetnames:
-        ws = wb["graph  Timing"+Sheet]
+    if "Graph Timing "+ Sheet in wb.sheetnames:
+        ws = wb["Graph Timing "+Sheet]
     else:
-        ws = wb.create_sheet("graph  Timing"+Sheet)
+        ws = wb.create_sheet("Graph Timing "+Sheet)
 #----------------------------------------------------------------
 
 #------------------- generate time --------------------------------
@@ -164,4 +164,4 @@ def main(FileName,Sheet):
         print("Please, Close the Workbook before continuing")
 #----------------------------------------------------------------
 
-main("PyDSheet.xlsx","ABB1") #File_Name and Sheet_Name
+#gen("PyDSheet.xlsx","ABB1") #File_Name and Sheet_Name
