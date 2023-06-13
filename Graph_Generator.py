@@ -1,6 +1,6 @@
 from openpyxl import *
 from openpyxl.styles import PatternFill
-from datetime import datetime
+from datetime import datetime,time
 
 import string
 import random
@@ -128,12 +128,12 @@ def Poc(FileName,Sheet):
             elif round == 2:
                 dict["P_Name"] = cell.value
             elif round == 3:
-                if type(cell.value) == type(datetime.now()):
+                if type(cell.value) == type(time(10,0)):
                     dict["Start"] = cell.value.strftime("%H:%M")
                 else:
                     dict["Start"] = cell.value
             elif round == 4:
-                if type(cell.value) == type(datetime.now()):
+                if type(cell.value) == type(time(10,0)):
                     dict["End"] = cell.value.strftime("%H:%M")
                 else:
                     dict["End"] = cell.value
