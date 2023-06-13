@@ -61,10 +61,14 @@ def gen_letter(max_letter = "AY"):
 
 def Poc(FileName,Sheet):
 #------------------- open excel file --------------------------------
+    loading = 0 
     try:
         wb = load_workbook(FileName) #use out
     except FileNotFoundError:
-        print("Sheet not found")
+        #print("File not found")
+        return loading #file not found
+    else:
+        loading = 1
 #----------------------------------------------------------------
 
 #------------------- access sheet or create sheet --------------------------------    
@@ -124,9 +128,15 @@ def Poc(FileName,Sheet):
             elif round == 2:
                 dict["P_Name"] = cell.value
             elif round == 3:
-                dict["Start"] = cell.value.strftime("%H:%M")
+                if type(cell.value) == type(datetime.now()):
+                    dict["Start"] = cell.value.strftime("%H:%M")
+                else:
+                    dict["Start"] = cell.value
             elif round == 4:
-                dict["End"] = cell.value.strftime("%H:%M")
+                if type(cell.value) == type(datetime.now()):
+                    dict["End"] = cell.value.strftime("%H:%M")
+                else:
+                    dict["End"] = cell.value
             else:
                 print("??")
             round+=1
@@ -161,7 +171,11 @@ def Poc(FileName,Sheet):
     try:
         wb.save(FileName)
     except PermissionError:
-        print("Please, Close the Workbook before continuing")
+        #print("Please, Close the Workbook before continuing")
+        return loading
+    else:
+        loading = 2
+        return loading
 #----------------------------------------------------------------
 
-#gen("PyDSheet.xlsx","ABB1") #File_Name and Sheet_Name
+#Poc("PyDSheet.xlsx","Sheet1") #File_Name and Sheet_Name
