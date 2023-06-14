@@ -123,6 +123,8 @@ def Poc(FileName,Sheet):
         round = 1
         dict ={} #Tool(Blending or Circulate), P_Name, Start, End
         for cell in r:
+            if cell.value is None:
+                break
             if round == 1:
                 dict["Tool"] = cell.value
             elif round == 2:
@@ -140,20 +142,24 @@ def Poc(FileName,Sheet):
             else:
                 print("??")
             round+=1
-        start_hour = timer.index(dict["Start"])+2
-        end_hour = timer.index(dict["End"])+3
-        Fill = PatternFill(start_color=color[use_color],end_color=color[use_color],fill_type="solid")
-        for i in range(start_hour, end_hour):
-            if dict["Tool"] == "Blending":
-                if i == start_hour:
-                    ws.cell(row=3,column=i,value=dict["P_Name"]).fill=Fill
+            #print(cc)
+        if len(dict) == 0:
+            break
+        else:
+            start_hour = timer.index(dict["Start"])+2
+            end_hour = timer.index(dict["End"])+3
+            Fill = PatternFill(start_color=color[use_color],end_color=color[use_color],fill_type="solid")
+            for i in range(start_hour, end_hour):
+                if dict["Tool"] == "Blending":
+                    if i == start_hour:
+                        ws.cell(row=3,column=i,value=dict["P_Name"]).fill=Fill
+                    else:
+                        ws.cell(row=3,column=i).fill=Fill
                 else:
-                    ws.cell(row=3,column=i).fill=Fill
-            else:
-                if i == start_hour:
-                    ws.cell(row=5,column=i,value=dict["P_Name"]).fill=Fill
-                else:
-                    ws.cell(row=5,column=i).fill=Fill
+                    if i == start_hour:
+                        ws.cell(row=5,column=i,value=dict["P_Name"]).fill=Fill
+                    else:
+                        ws.cell(row=5,column=i).fill=Fill
     
     ##ws["B1"]="Hello Python"
     #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
@@ -178,4 +184,4 @@ def Poc(FileName,Sheet):
         return loading
 #----------------------------------------------------------------
 
-#Poc("PyDSheet.xlsx","Sheet1") #File_Name and Sheet_Name
+#Poc("for graph editor.xlsx","ABB1 01-06-23") #File_Name and Sheet_Name
