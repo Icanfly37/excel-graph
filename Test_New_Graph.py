@@ -20,6 +20,7 @@ class Graph():
               "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC","0099CC00",
               "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
               "00993300","00993366","00333399"]
+        self.head = []
         
     def Poc(self):
     #------------------- open excel file --------------------------------
@@ -40,16 +41,19 @@ class Graph():
     #----------------------------------------------------------------
     
         self.create_timeline()
+        self.ws = self.wb[self.Sheet]
+        targetcolumn = ["B","D"]
+        self.create_header(targetcolumn)
         
     #------------------- save excel file --------------------------------      
-        try:
-            self.wb.save(self.Filename)
-        except PermissionError:
+        #try:
+        #    self.wb.save(self.Filename)
+        #except PermissionError:
             #print("Please, Close the Workbook before continuing")
-            return self.loading
-        else:
-            self.loading = 2
-            return self.loading
+        #    return self.loading
+        #else:
+        #    self.loading = 2
+        #    return self.loading
     #----------------------------------------------------------------
   
     def create_timeline(self):
@@ -75,9 +79,11 @@ class Graph():
                 insert_pos += 1
                 round-=1
     
-    def create_header(self):
-        for i in 
-        self.ws.cell(row=2, column=insert_pos+1, value=self.timer[insert_pos-1])
+    def create_header(self,cols):
+        for col in cols:
+            for cell in self.ws[col]:
+                self.head.append(cell.value)
+                
     
-g = Graph("Book Test.xlsx","ABB")
-g.Poc()
+g = Graph("ABB workshop Graph.xlsx","ABB1")
+print(g.Poc())
