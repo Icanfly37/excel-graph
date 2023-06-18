@@ -41,9 +41,10 @@ class Graph():
     #----------------------------------------------------------------
     
         self.create_timeline()
-        self.ws = self.wb[self.Sheet]
+        self.wsr = self.wb[self.Sheet]
         targetcolumn = ["B","D"]
         self.create_header(targetcolumn)
+        #print(self.head)
         
     #------------------- save excel file --------------------------------      
         #try:
@@ -81,8 +82,11 @@ class Graph():
     
     def create_header(self,cols):
         for col in cols:
-            for cell in self.ws[col]:
+            for cell in self.wsr[col]:
                 self.head.append(cell.value)
+        self.head.pop(0)
+        self.ws.cell(row=2, column=1, value="Date/Time")
+        
                 
     
 g = Graph("ABB workshop Graph.xlsx","ABB1")
