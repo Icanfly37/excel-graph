@@ -30,6 +30,8 @@ class Graph():
             self.ws = self.wb.create_sheet("Graph Timing "+self.Sheet)
     #----------------------------------------------------------------
     
+        self.create_timeline()
+        
     #------------------- save excel file --------------------------------      
         try:
             self.wb.save(self.Filename)
@@ -40,21 +42,8 @@ class Graph():
             self.loading = 2
             return self.loading
     #----------------------------------------------------------------
-
-    def gentime(l,start_hour,stop_hour,step_hour,start_minute,stop_minute,step_minute):
-        for hour in range(start_hour,stop_hour,step_hour):
-            for minute in range(start_minute,stop_minute,step_minute):
-                # Format the hour and minute with leading zeros
-                formatted_hour = f"{hour:02d}"
-                formatted_minute = f"{minute:02d}"
-                
-                # Print or use the formatted hour and minute
-                l.append(f"{formatted_hour}:{formatted_minute}")
-                #print(f"{formatted_hour}:{formatted_minute}")
-        return l
-    
+  
     def create_timeline(self):
-        #------------------- generate time --------------------------------
         start_hour = 0
         #stop_hour = 0
         #step_hour = 1
@@ -66,21 +55,16 @@ class Graph():
                 formatted_hour = f"{hour:02d}"
                 formatted_minute = f"{minute:02d}"
                 self.timer.append(f"{formatted_hour}:{formatted_minute}")
-        for hour in range(0,1):
-            for minute in range(start_minute,stop_minute,30):
-                formatted_hour = f"{hour:02d}"
-                formatted_minute = f"{minute:02d}"
-                self.timer.append(f"{formatted_hour}:{formatted_minute}")
-        
-        
-        
+        self.timer.append(self.timer[0])
         insert_pos = 1
         round = len(self.timer)
         while True:
             if round == 0:
                 break
             else:
-                self.ws.cell(row=1, column=insert_pos+1, value=self.timer[insert_pos-1])
+                self.ws.cell(row=2, column=insert_pos+1, value=self.timer[insert_pos-1])
                 insert_pos += 1
                 round-=1
-    #----------------------------------------------------------------
+    
+g = Graph("Book Test.xlsx","ABB")
+g.Poc()
