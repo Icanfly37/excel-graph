@@ -11,6 +11,15 @@ class Graph():
         self.Sheet = Sheet
         self.loading = 0
         self.timer = []
+        self.color = ["00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
+              "00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
+              "00008000","00808000","00800080","00008080","00C0C0C0","00808080",
+              "009999FF","00993366","00FFFFCC","00CCFFFF","00FF8080","000066CC",
+              "00CCCCFF","00FF00FF","00FFFF00","0000FFFF","00800080","00008080",
+              "000000FF","0000CCFF","00CCFFFF","00CCFFCC","00FFFF99","0099CCFF",
+              "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC","0099CC00",
+              "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
+              "00993300","00993366","00333399"]
         
     def Poc(self):
     #------------------- open excel file --------------------------------
@@ -65,6 +74,10 @@ class Graph():
                 self.ws.cell(row=2, column=insert_pos+1, value=self.timer[insert_pos-1])
                 insert_pos += 1
                 round-=1
+    
+    def create_header(self):
+        for i in 
+        self.ws.cell(row=2, column=insert_pos+1, value=self.timer[insert_pos-1])
     
 g = Graph("Book Test.xlsx","ABB")
 g.Poc()
