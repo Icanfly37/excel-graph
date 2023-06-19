@@ -83,7 +83,6 @@ class Graph():
                 round-=1
     
     def create_header(self,cols):
-        first = False
         for col in cols:
             for cell in self.wsr[col]:
                 if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ" or cell.value in self.head:
