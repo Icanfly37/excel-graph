@@ -103,7 +103,7 @@ class Graph():
     def fill_cell(self):
         #------------------- Ploting in sheet --------------------------------
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
-            #use_color = random.randint(0,len(self.color)-1)
+            use_color = random.randint(0,len(self.color)-1)
             round = 1
             for cell in r:
                 if cell.value is None:
@@ -128,7 +128,23 @@ class Graph():
                     print("??")
                 round+=1
             #print(self.dict)
-            
+            if len(self.dict) == 0:
+                break
+            else:
+                start_hour = self.timer.index(self.dict["Start"])+2
+                end_hour = self.timer.index(self.dict["End"])+3
+                Fill = PatternFill(start_color=self.color[use_color],end_color=self.color[use_color],fill_type="solid")
+                for i in range(start_hour, end_hour):
+                    if self.dict["Tool"] == "Blending":
+                        if i == start_hour:
+                            self.ws.cell(row=3,column=i,value=self.dict["P_Name"]).fill=Fill
+                        else:
+                            self.ws.cell(row=3,column=i).fill=Fill
+                    else:
+                        if i == start_hour:
+                            self.ws.cell(row=5,column=i,value=self.dict["P_Name"]).fill=Fill
+                        else:
+                            self.ws.cell(row=5,column=i).fill=Fill
         
         ##ws["B1"]="Hello Python"
         #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
