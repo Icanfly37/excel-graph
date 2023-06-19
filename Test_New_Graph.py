@@ -20,7 +20,7 @@ class Graph():
               "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC","0099CC00",
               "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
               "00993300","00993366","00333399"]
-        self.head = {"start":[],"stop":[]}
+        self.head = []
         
     def Poc(self):
     #------------------- open excel file --------------------------------
@@ -34,27 +34,29 @@ class Graph():
     #----------------------------------------------------------------
 
     #------------------- access sheet or create sheet --------------------------------    
-        #if "Graph Timing "+ self.Sheet in self.wb.sheetnames:
-        #    self.ws = self.wb["Graph Timing "+self.Sheet]
-        #else:
-        #    self.ws = self.wb.create_sheet("Graph Timing "+self.Sheet)
+        if "Graph Timing "+ self.Sheet in self.wb.sheetnames:
+            self.ws = self.wb["Graph Timing "+self.Sheet]
+        else:
+            self.ws = self.wb.create_sheet("Graph Timing "+self.Sheet)
     #----------------------------------------------------------------
-    
-        #self.create_timeline()
+        self.ws.cell(row=1, column=1, value="Blending")
+        self.ws.cell(row=1, column=2, value=self.Sheet)
+        self.ws.cell(row=2, column=1, value="วันที่/เวลา")
+        self.create_timeline()
         self.wsr = self.wb[self.Sheet]
         targetcolumn = ["B","D"]
         self.create_header(targetcolumn)
-        print(self.head)
+        #print(self.head)
         
     #------------------- save excel file --------------------------------      
-        #try:
-        #    self.wb.save(self.Filename)
-        #except PermissionError:
+        try:
+            self.wb.save(self.Filename)
+        except PermissionError:
             #print("Please, Close the Workbook before continuing")
-        #    return self.loading
-        #else:
-        #    self.loading = 2
-        #    return self.loading
+            return self.loading
+        else:
+            self.loading = 2
+            return self.loading
     #----------------------------------------------------------------
   
     def create_timeline(self):
@@ -84,31 +86,19 @@ class Graph():
         first = False
         for col in cols:
             for cell in self.wsr[col]:
-                if cell.value == "วันที่เริ่มต้น":
-                    first = True
-                elif cell.value == "วันที่เสร็จ":
-                    first = False
-                if first is True:
-                    if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ":
-                        continue
-                    else:
-                        self.head["start"].append(cell.value)
+                if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ" or cell.value in self.head:
+                    continue
                 else:
-                    if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ":
-                        continue
-                    else:
-                        self.head["stop"].append(cell.value)
-                
-        #self.head.pop(0)
-        #self.ws.cell(row=2, column=1, value="Date/Time")
-        #insert_cell = 0
-        #loop = 0
-        #while True:
-        #    if loop == len(self.head):
-        #        break
-        #    else:
-        #        print(self.head[loop])
-        #        loop+=1
+                    self.head.append(cell.value)
+        insert_cell = 4
+        loop = 0
+        while True:
+            if loop == len(self.head):
+                break
+            else:
+                self.ws.cell(row=insert_cell, column=1, value=self.head[loop])
+                loop += 1
+                insert_cell += 2
         
                 
     
