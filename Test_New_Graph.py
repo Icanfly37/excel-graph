@@ -3,7 +3,7 @@ from openpyxl.styles import PatternFill
 from datetime import datetime,time
 
 import string
-import random as ran
+import random
 
 class Graph():
     def __init__(self,Filename,Sheet):
@@ -21,6 +21,7 @@ class Graph():
               "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
               "00993300","00993366","00333399"]
         self.head = []
+        self.dict ={}
         
     def Poc(self):
     #------------------- open excel file --------------------------------
@@ -46,6 +47,7 @@ class Graph():
         self.wsr = self.wb[self.Sheet]
         targetcolumn = ["B","D"]
         self.create_header(targetcolumn)
+        self.fill_cell()
         #print(self.head)
         
     #------------------- save excel file --------------------------------      
@@ -98,7 +100,47 @@ class Graph():
                 self.ws.cell(row=insert_cell, column=1, value=self.head[loop])
                 loop += 1
                 insert_cell += 2
+    def fill_cell(self):
+        #------------------- Ploting in sheet --------------------------------
+        for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
+            #use_color = random.randint(0,len(self.color)-1)
+            round = 1
+            for cell in r:
+                if cell.value is None:
+                    break
+                if round == 1:
+                    self.dict["P_Name"] = cell.value
+                elif round == 2:
+                    self.dict["Date_Start"] = cell.value
+                elif round == 3:
+                    if type(cell.value) == type(time(10,0)):
+                        self.dict["Time_Start"] = cell.value.strftime("%H:%M")
+                    else:
+                        self.dict["Time_Start"] = cell.value
+                elif round == 4:
+                    self.dict["Date_End"] = cell.value
+                elif round == 5:
+                    if type(cell.value) == type(time(10,0)):
+                        self.dict["Time_End"] = cell.value.strftime("%H:%M")
+                    else:
+                        self.dict["Time_End"] = cell.value
+                else:
+                    print("??")
+                round+=1
+            #print(self.dict)
+            
         
+        ##ws["B1"]="Hello Python"
+        #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
+        #    time = "0:00"
+        #    for i in range(1,26):
+        #        for j in range:
+        #            ws[az[i]+str(i)] = "0.00"
+        #else:
+            
+            
+            
+    #----------------------------------------------------------------   
                 
     
 g = Graph("ABB workshop Graph.xlsx","ABB1")
