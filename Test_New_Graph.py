@@ -10,7 +10,7 @@ class Graph():
         self.Filename = Filename
         self.Sheet = Sheet
         self.loading = 0
-        self.timer = []
+        self.timer = [] #timestamp
         self.color = ["00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
               "00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
               "00008000","00808000","00800080","00008080","00C0C0C0","00808080",
@@ -20,7 +20,7 @@ class Graph():
               "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC","0099CC00",
               "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
               "00993300","00993366","00333399"]
-        self.head = []
+        self.head = [] #datetimestamp
         self.dict ={}
         
     def Poc(self):
@@ -131,20 +131,16 @@ class Graph():
             if len(self.dict) == 0:
                 break
             else:
-                start_hour = self.timer.index(self.dict["Start"])+2
-                end_hour = self.timer.index(self.dict["End"])+3
+                start_hour = self.timer.index(self.dict["Time_Start"])+2
+                end_hour = self.timer.index(self.dict["Time_End"])+3
                 Fill = PatternFill(start_color=self.color[use_color],end_color=self.color[use_color],fill_type="solid")
-                for i in range(start_hour, end_hour):
-                    if self.dict["Tool"] == "Blending":
-                        if i == start_hour:
-                            self.ws.cell(row=3,column=i,value=self.dict["P_Name"]).fill=Fill
-                        else:
-                            self.ws.cell(row=3,column=i).fill=Fill
-                    else:
-                        if i == start_hour:
-                            self.ws.cell(row=5,column=i,value=self.dict["P_Name"]).fill=Fill
-                        else:
-                            self.ws.cell(row=5,column=i).fill=Fill
+                for a in range(0,len(self.head)):
+                    if self.dict["Date_Start"] == self.head[a]:
+                        for i in range(start_hour, end_hour):
+                            if i == start_hour:
+                                self.ws.cell(row=((2*a)+4),column=i,value=self.dict["P_Name"]).fill=Fill
+                            else:
+                                self.ws.cell(row=((2*a)+4),column=i).fill=Fill
         
         ##ws["B1"]="Hello Python"
         #if ws[az[1]+"1"] != "0:00" and ws[az[25]+"25"] != "0:00":
