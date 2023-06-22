@@ -10,7 +10,7 @@ class Graph():
         self.Filename = Filename
         self.Sheet = Sheet
         self.loading = 0
-        self.timer = [] #timestamp
+        self.timer = {} #timestamp
         self.color = ["00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
               "00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
               "00008000","00808000","00800080","00008080","00C0C0C0","00808080",
@@ -43,10 +43,10 @@ class Graph():
         #self.ws.cell(row=1, column=1, value="Blending")
         #self.ws.cell(row=1, column=2, value=self.Sheet)
         #self.ws.cell(row=2, column=1, value="วันที่/เวลา")
-        #self.create_timeline()
+        self.create_timeline()
         self.wsr = self.wb[self.Sheet]
         targetcolumn = ["B"]
-        self.create_header(targetcolumn)
+        #self.create_header(targetcolumn)
         #self.fill_cell()
         #print(self.head)
         
@@ -72,17 +72,11 @@ class Graph():
             for minute in range(start_minute,stop_minute+1,30):
                 formatted_hour = f"{hour:02d}"
                 formatted_minute = f"{minute:02d}"
-                self.timer.append(f"{formatted_hour}:{formatted_minute}")
-        self.timer.append(self.timer[0])
+                self.timer[f"{formatted_hour}:{formatted_minute}"] = (False)
         insert_pos = 1
-        round = len(self.timer)
-        while True:
-            if round == 0:
-                break
-            else:
-                self.ws.cell(row=2, column=insert_pos+1, value=self.timer[insert_pos-1])
-                insert_pos += 1
-                round-=1
+        for x in self.timer.keys():
+            self.ws.cell(row=2, column=insert_pos+1, value=x)
+            insert_pos += 1
     
     def create_header(self,cols):
         for col in cols:
@@ -110,7 +104,7 @@ class Graph():
         a = 0
         listdate = self.head
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
-            use_color = random.randint(0,len(self.color)-1)
+            #use_color = random.randint(0,len(self.color)-1)
             round = 1
             #a = 0
             for cell in r:
