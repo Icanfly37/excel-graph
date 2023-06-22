@@ -1,6 +1,7 @@
 from openpyxl import *
 from openpyxl.styles import PatternFill
 from datetime import datetime,time
+import math
 
 import string
 import random
@@ -43,10 +44,10 @@ class Graph():
         #self.ws.cell(row=1, column=1, value="Blending")
         #self.ws.cell(row=1, column=2, value=self.Sheet)
         #self.ws.cell(row=2, column=1, value="วันที่/เวลา")
-        self.create_timeline()
+        #self.create_timeline()
         self.wsr = self.wb[self.Sheet]
         targetcolumn = ["B"]
-        #self.create_header(targetcolumn)
+        self.create_header(targetcolumn)
         #self.fill_cell()
         #print(self.head)
         
@@ -88,7 +89,11 @@ class Graph():
                         self.head[cell.value] += 1
                     else:
                         self.head[cell.value] = 1
-        print(self.head)
+        #print(self.head)
+        for x,y in self.head.items():
+            if y > 1:
+                self.head[x] = math.ceil(y/2)
+        #print(self.head)
         insert_cell = 4
         for x,y in self.head.items():   
             loop = 0
