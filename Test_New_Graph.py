@@ -20,7 +20,7 @@ class Graph():
               "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC","0099CC00",
               "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
               "00993300","00993366","00333399"]
-        self.head = [] #datetimestamp
+        self.head = {} #datetimestamp
         self.dict ={}
         
     def Poc(self):
@@ -40,14 +40,14 @@ class Graph():
         else:
             self.ws = self.wb.create_sheet("Graph Timing "+self.Sheet)
     #----------------------------------------------------------------
-        self.ws.cell(row=1, column=1, value="Blending")
-        self.ws.cell(row=1, column=2, value=self.Sheet)
-        self.ws.cell(row=2, column=1, value="วันที่/เวลา")
-        self.create_timeline()
+        #self.ws.cell(row=1, column=1, value="Blending")
+        #self.ws.cell(row=1, column=2, value=self.Sheet)
+        #self.ws.cell(row=2, column=1, value="วันที่/เวลา")
+        #self.create_timeline()
         self.wsr = self.wb[self.Sheet]
-        targetcolumn = ["B","D"]
+        targetcolumn = ["B"]
         self.create_header(targetcolumn)
-        self.fill_cell()
+        #self.fill_cell()
         #print(self.head)
         
     #------------------- save excel file --------------------------------      
@@ -87,19 +87,24 @@ class Graph():
     def create_header(self,cols):
         for col in cols:
             for cell in self.wsr[col]:
-                if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ" or cell.value in self.head:
+                if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ":
                     continue
                 else:
-                    self.head.append(cell.value)
+                    if cell.value in self.head:
+                        self.head[cell.value] += 1
+                    else:
+                        self.head[cell.value] = 1
+        print(self.head)
         insert_cell = 4
-        loop = 0
-        while True:
-            if loop == len(self.head):
-                break
-            else:
-                self.ws.cell(row=insert_cell, column=1, value=self.head[loop])
-                loop += 1
-                insert_cell += 2
+        for x,y in self.head.items():   
+            loop = 0
+            while True:
+                if loop == y:
+                    break
+                else:
+                    self.ws.cell(row=insert_cell, column=1, value=x)
+                    loop += 1
+                    insert_cell += 2
     def fill_cell(self):
         #------------------- Ploting in sheet --------------------------------
         a = 0
