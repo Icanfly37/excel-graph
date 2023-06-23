@@ -90,9 +90,9 @@ class Graph():
                     else:
                         self.head[cell.value] = 1
         #print(self.head)
-        for x,y in self.head.items():
-            if y > 1:
-                self.head[x] = math.ceil(y/2)
+        #for x,y in self.head.items():
+        #    if y > 1:
+        #        self.head[x] = math.ceil(y/2)
         #print(self.head)
         insert_cell = 4
         for x,y in self.head.items():   
@@ -103,13 +103,19 @@ class Graph():
                 else:
                     self.ws.cell(row=insert_cell, column=1, value=x)
                     loop += 1
-                    insert_cell += 2
+                    insert_cell += 1
     def fill_cell(self):
         #------------------- Ploting in sheet --------------------------------
         a = 0
         listdate = self.head
+        fil_color = self.color
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
-            #use_color = random.randint(0,len(self.color)-1)
+            if len(fil_color) == 0:
+                fil_color = self.color
+            else:
+                use_color = random.randint(0,len(self.color)-1)
+                choose_color = fil_color[use_color]
+                fil_color.remove(choose_color)
             round = 1
             #a = 0
             for cell in r:
@@ -140,14 +146,14 @@ class Graph():
             else:
                 start_hour = self.timer.index(self.dict["Time_Start"])+2
                 end_hour = self.timer.index(self.dict["Time_End"])+3
-                Fill = PatternFill(start_color=self.color[use_color],end_color=self.color[use_color],fill_type="solid")
-                for a in range(0,len(self.head)):
-                    if self.dict["Date_Start"] == self.head[a]:
-                        for i in range(start_hour, end_hour):
-                            if i == start_hour:
-                                self.ws.cell(row=((2*a)+4),column=i,value=self.dict["P_Name"]).fill=Fill
-                            else:
-                                self.ws.cell(row=((2*a)+4),column=i).fill=Fill
+                Fill = PatternFill(start_color=choose_color,end_color=choose_color,fill_type="solid")
+            #    for a in range(0,len(self.head)):
+            #        if self.dict["Date_Start"] == self.head[a]:
+            #            for i in range(start_hour, end_hour):
+            #                if i == start_hour:
+            #                    self.ws.cell(row=((2*a)+4),column=i,value=self.dict["P_Name"]).fill=Fill
+            #                else:
+            #                    self.ws.cell(row=((2*a)+4),column=i).fill=Fill
                 #if  a <= len(self.head)-1 and self.dict["Date_Start"] == listdate[a] :   
                 #    for i in range(start_hour, end_hour):
                 #        if i == start_hour:
