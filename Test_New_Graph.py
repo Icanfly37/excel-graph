@@ -41,14 +41,16 @@ class Graph():
         else:
             self.ws = self.wb.create_sheet("Graph Timing "+self.Sheet)
     #----------------------------------------------------------------
-        #self.ws.cell(row=1, column=1, value="Blending")
-        #self.ws.cell(row=1, column=2, value=self.Sheet)
-        #self.ws.cell(row=2, column=1, value="วันที่/เวลา")
-        #self.create_timeline()
+        self.ws.cell(row=1, column=1, value="Blending")
+        self.ws.cell(row=1, column=2, value=self.Sheet)
+        self.ws.cell(row=2, column=1, value="วันที่/เวลา")
+        self.create_timeline()
+        #print(self.timer)
         self.wsr = self.wb[self.Sheet]
         targetcolumn = ["B"]
         self.create_header(targetcolumn)
-        #self.fill_cell()
+        print(self.head)
+        self.fill_cell()
         #print(self.head)
         
     #------------------- save excel file --------------------------------      
@@ -115,7 +117,7 @@ class Graph():
             else:
                 use_color = random.randint(0,len(self.color)-1)
                 choose_color = fil_color[use_color]
-                fil_color.remove(choose_color)
+                #fil_color.remove(choose_color)
             round = 1
             #a = 0
             for cell in r:
@@ -141,19 +143,23 @@ class Graph():
                     print("??")
                 round+=1
             print(self.dict)
-            if len(self.dict) == 0:
+            if len(self.dict)-1 == 0:
                 break
             else:
-                start_hour = self.timer.index(self.dict["Time_Start"])+2
-                end_hour = self.timer.index(self.dict["Time_End"])+3
+                #start_hour = self.timer.index(self.dict["Time_Start"])+2
+                #end_hour = self.timer.index(self.dict["Time_End"])+3
+                start_hour = list(self.timer.keys()).index(self.dict["Time_Start"])+2
+                end_hour = list(self.timer.keys()).index(self.dict["Time_End"])+3
                 Fill = PatternFill(start_color=choose_color,end_color=choose_color,fill_type="solid")
-            #    for a in range(0,len(self.head)):
-            #        if self.dict["Date_Start"] == self.head[a]:
-            #            for i in range(start_hour, end_hour):
-            #                if i == start_hour:
-            #                    self.ws.cell(row=((2*a)+4),column=i,value=self.dict["P_Name"]).fill=Fill
-            #                else:
-            #                    self.ws.cell(row=((2*a)+4),column=i).fill=Fill
+                for a in range(0,len(self.head)):
+                    #if self.dict["Date_Start"] == self.head[a]:
+                    if self.dict["Date_Start"] == list(self.head)[a]:
+                        for i in range(start_hour, end_hour):
+                            if i == start_hour:
+                                self.ws.cell(row=(a+4),column=i,value=self.dict["P_Name"]).fill=Fill
+                            else:
+                                self.ws.cell(row=(a+4),column=i).fill=Fill
+                fil_color.remove(choose_color)
                 #if  a <= len(self.head)-1 and self.dict["Date_Start"] == listdate[a] :   
                 #    for i in range(start_hour, end_hour):
                 #        if i == start_hour:
