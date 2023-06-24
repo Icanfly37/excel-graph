@@ -1,7 +1,6 @@
 from openpyxl import *
 from openpyxl.styles import PatternFill
 from datetime import datetime,time
-import math
 
 import string
 import random
@@ -11,7 +10,7 @@ class Graph():
         self.Filename = Filename
         self.Sheet = Sheet
         self.loading = 0
-        self.timer = {} #timestamp
+        self.timer = [] #timestamp
         self.color = ["00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
               "00FF0000","0000FF00","000000FF","00FFFF00","00FF00FF","0000FFFF",
               "00008000","00808000","00800080","00008080","00C0C0C0","00808080",
@@ -21,7 +20,7 @@ class Graph():
               "00FF99CC","00CC99FF","00FFCC99","003366FF","0033CCCC","0099CC00",
               "00FFCC00","00FF9900","00FF6600","00666699","00969696","00339966",
               "00993300","00993366","00333399"]
-        self.head = {} #datetimestamp
+        self.head = [] #datetimestamp
         self.dict ={}
         
     def Poc(self):
@@ -45,11 +44,9 @@ class Graph():
         self.ws.cell(row=1, column=2, value=self.Sheet)
         self.ws.cell(row=2, column=1, value="วันที่/เวลา")
         self.create_timeline()
-        #print(self.timer)
         self.wsr = self.wb[self.Sheet]
-        targetcolumn = ["B"]
+        targetcolumn = ["B","D"]
         self.create_header(targetcolumn)
-        #print(self.head)
         self.fill_cell()
         #print(self.head)
         
@@ -75,49 +72,40 @@ class Graph():
             for minute in range(start_minute,stop_minute+1,30):
                 formatted_hour = f"{hour:02d}"
                 formatted_minute = f"{minute:02d}"
-                self.timer[f"{formatted_hour}:{formatted_minute}"] = (False)
+                self.timer.append(f"{formatted_hour}:{formatted_minute}")
+        self.timer.append(self.timer[0])
         insert_pos = 1
-        for x in self.timer.keys():
-            self.ws.cell(row=2, column=insert_pos+1, value=x)
-            insert_pos += 1
+        round = len(self.timer)
+        while True:
+            if round == 0:
+                break
+            else:
+                self.ws.cell(row=2, column=insert_pos+1, value=self.timer[insert_pos-1])
+                insert_pos += 1
+                round-=1
     
     def create_header(self,cols):
         for col in cols:
             for cell in self.wsr[col]:
-                if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ":
+                if cell.value == "วันที่เริ่มต้น" or cell.value == "วันที่เสร็จ" or cell.value in self.head:
                     continue
                 else:
-                    if cell.value in self.head:
-                        self.head[cell.value] += 1
-                    else:
-                        self.head[cell.value] = 1
-        #print(self.head)
-        #for x,y in self.head.items():
-        #    if y > 1:
-        #        self.head[x] = math.ceil(y/2)
-        #print(self.head)
+                    self.head.append(cell.value)
         insert_cell = 4
-        for x,y in self.head.items():   
-            loop = 0
-            while True:
-                if loop == y:
-                    break
-                else:
-                    self.ws.cell(row=insert_cell, column=1, value=x)
-                    loop += 1
-                    insert_cell += 1
+        loop = 0
+        while True:
+            if loop == len(self.head):
+                break
+            else:
+                self.ws.cell(row=insert_cell, column=1, value=self.head[loop])
+                loop += 1
+                insert_cell += 2
     def fill_cell(self):
         #------------------- Ploting in sheet --------------------------------
         a = 0
-        #listdate = self.head
-        fil_color = self.color
+        listdate = self.head
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
-            if len(fil_color) == 0:
-                fil_color = self.color
-            else:
-                use_color = random.randint(0,len(self.color)-1)
-                choose_color = fil_color[use_color]
-                #fil_color.remove(choose_color)
+            use_color = random.randint(0,len(self.color)-1)
             round = 1
             #a = 0
             for cell in r:
@@ -146,20 +134,18 @@ class Graph():
             if len(self.dict) == 0:
                 break
             else:
-                timestamp = list(self.timer.keys())
-                t_start = timestamp.index(self.dict["Time_Start"])+2
-                t_end = timestamp.index(self.dict["Time_Start"])+3
-                #z = len(self.head)-1
-                Fill = PatternFill(start_color=choose_color,end_color=choose_color,fill_type="solid")
-                first_header = 4
-               
-                
-                fil_color.remove(choose_color)
-            
-            
-            
+                start_hour = self.timer.index(self.dict["Time_Start"])+2
+                end_hour = self.timer.index(self.dict["Time_End"])+3
+                Fill = PatternFill(start_color=self.color[use_color],end_color=self.color[use_color],fill_type="solid")
+                for a in range(0,len(self.head)):
+                    if self.dict["Date_Start"] == self.head[a]:
+                        for i in range(start_hour, end_hour):
+                            if i == start_hour:
+                                self.ws.cell(row=((2*a)+4),column=i,value=self.dict["P_Name"]).fill=Fill
+                            else:
+                                self.ws.cell(row=((2*a)+4),column=i).fill=Fill                                   
     #----------------------------------------------------------------   
                 
     
-g = Graph("ABB workshop Graph.xlsx","ABB1")
-print(g.Poc())
+#g = Graph("ABB workshop Graph.xlsx","ABB1")
+#print(g.Poc())

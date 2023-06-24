@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox as mb
-import Graph_Generator as GG
+from Graph import Graph as GG
 
 def browse_file():
     global file_path
@@ -13,7 +13,10 @@ def pocess():
     #print(file_path)
     #print(sheet_path.get())
     try:
-        log = GG.Poc(file_path,str(sheet_path.get()))
+        Get_Graph = GG(file_path,str(sheet_path.get()))
+        log = Get_Graph.Poc()
+        #g = Graph("ABB workshop Graph.xlsx","ABB1")
+        #print(g.Poc())
     except NameError:
         mb.showerror("Excel File","Please, Enter a File, Not Empty!")
     else:
