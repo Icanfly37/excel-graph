@@ -20,12 +20,24 @@ def pocess():
     except NameError:
         mb.showerror("Excel File","Please, Enter a File, Not Empty!")
     else:
-        if log == 0:
-            mb.showerror("Excel File","File Not Found")
-        elif log == 1:
-            mb.showwarning("Save Problem","Please, Close the Workbook before continuing")
+        if log[1] == 0:
+            if log[0] == 0:
+                mb.showerror("Excel File","File Not Found")
+            elif log[0] == 1:
+                mb.showwarning("Save Problem","Please, Close the Workbook before continuing")
+            else:
+                mb.showinfo("Process","Generate Graph Successful")
         else:
-            mb.showinfo("Process","Generate Graph Successful")
+            if log[0] == 3:
+                mb.showerror("Time_Start","Please, make sure your minute on time start is correct on row "+str(log[1]))
+            elif log[0] == 4:
+                mb.showerror("Time_End","Please, make sure your minute on time end is correct on row "+str(log[1]))
+        #if log == 0:
+        #    mb.showerror("Excel File","File Not Found")
+        #elif log == 1:
+        #    mb.showwarning("Save Problem","Please, Close the Workbook before continuing")
+        #else:
+        #    mb.showinfo("Process","Generate Graph Successful")
 
 # สร้างหน้าต่างหลัก
 window = tk.Tk()

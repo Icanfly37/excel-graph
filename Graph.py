@@ -9,7 +9,7 @@ class Graph():
     def __init__(self,Filename,Sheet):
         self.Filename = Filename
         self.Sheet = Sheet
-        self.loading = 0
+        self.loading = [0,0] #(error_state,row_error)
         self.timer = [] #timestamp
         self.color = ["0000FF00", "00FF99CC", "00FFFF00", "00CCCCFF", "0000FFFF", "00FFCC99"]
         self.head = [] #datetimestamp
@@ -21,9 +21,9 @@ class Graph():
             self.wb = load_workbook(self.Filename) #use out
         except FileNotFoundError:
             #print("File not found")
-            return self.loading #file not found
+            return self.loading #file not found send (0,0)
         else:
-            self.loading = 1
+            self.loading[0] = 1
     #----------------------------------------------------------------
 
     #------------------- access sheet or create sheet --------------------------------    
@@ -43,14 +43,17 @@ class Graph():
         #print(self.head)
         
     #------------------- save excel file --------------------------------      
-        try:
-            self.wb.save(self.Filename)
-        except PermissionError:
-            #print("Please, Close the Workbook before continuing")
+        if (self.loading[0] == 3 or self.loading[0] == 4):
             return self.loading
         else:
-            self.loading = 2
-            return self.loading
+            try:
+                self.wb.save(self.Filename)
+            except PermissionError:
+                #print("Please, Close the Workbook before continuing")
+                return self.loading #send (1,0)
+            else:
+                self.loading[0] = 2
+                return self.loading
     #----------------------------------------------------------------
   
     def create_timeline(self):
@@ -96,8 +99,15 @@ class Graph():
         #------------------- Ploting in sheet --------------------------------
         a = 0
         use_color = 0
+        row_now = 0
+        first_time = True
         #listdate = self.head
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
+            if first_time is True:
+                row_now += 2
+                first_time = False
+            else:
+                row_now += 1
             if use_color == len(self.color)-1:
                 use_color = 0
             #use_color = random.randint(0,len(self.color)-1)
@@ -115,6 +125,11 @@ class Graph():
                         self.dict["Time_Start"] = cell.value.strftime("%H:%M")
                     else:
                         self.dict["Time_Start"] = cell.value
+                    if self.dict["Time_Start"] not in self.timer:
+                        self.loading[0] = 3
+                        self.loading[1] = row_now
+                        return
+                        #return self.loading #send (3,row_now)
                 elif round == 4:
                     self.dict["Date_End"] = cell.value
                 elif round == 5:
@@ -122,6 +137,11 @@ class Graph():
                         self.dict["Time_End"] = cell.value.strftime("%H:%M")
                     else:
                         self.dict["Time_End"] = cell.value
+                    if self.dict["Time_End"] not in self.timer:
+                        self.loading[0] = 4
+                        self.loading[1] = row_now
+                        return
+                        #return self.loading #send (4,row_now)
                 else:
                     print("??")
                 round+=1
@@ -143,5 +163,5 @@ class Graph():
     #----------------------------------------------------------------   
                 
     
-g = Graph("กราฟการทำงานของ ABB.xlsx","ABB1")
-print(g.Poc())
+#g = Graph("กราฟการทำงานของ ABB.xlsx","TestError")
+#print(g.Poc())
