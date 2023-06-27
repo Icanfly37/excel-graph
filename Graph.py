@@ -36,10 +36,15 @@ class Graph():
         self.ws.cell(row=1, column=2, value=self.Sheet)
         self.ws.cell(row=2, column=1, value="วันที่/เวลา")
         self.create_timeline()
-        self.wsr = self.wb[self.Sheet]
-        targetcolumn = ["B","D"]
-        self.create_header(targetcolumn)
-        self.fill_cell()
+        try:
+            self.wsr = self.wb[self.Sheet]
+        except KeyError:
+            self.loading[0] = 3
+            return self.loading
+        else:
+            targetcolumn = ["B","D"]
+            self.create_header(targetcolumn)
+            self.fill_cell()
         #print(self.head)
         
     #------------------- save excel file --------------------------------      

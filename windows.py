@@ -25,6 +25,8 @@ def pocess():
                 mb.showerror("Excel File","File Not Found")
             elif log[0] == 1:
                 mb.showwarning("Save Problem","Please, Close the Workbook before continuing")
+            elif log[0] == 3:
+                mb.showwarning("Sheet Problem"," Sheet can not find or let sheet name to be empty.")
             else:
                 mb.showinfo("Process","Generate Graph Successful")
         else:
