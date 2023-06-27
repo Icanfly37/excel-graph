@@ -95,9 +95,12 @@ class Graph():
     def fill_cell(self):
         #------------------- Ploting in sheet --------------------------------
         a = 0
-        listdate = self.head
+        use_color = 0
+        #listdate = self.head
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
-            use_color = random.randint(0,len(self.color)-1)
+            if use_color == len(self.color)-1:
+                use_color = 0
+            #use_color = random.randint(0,len(self.color)-1)
             round = 1
             #a = 0
             for cell in r:
@@ -129,6 +132,7 @@ class Graph():
                 start_hour = self.timer.index(self.dict["Time_Start"])+2
                 end_hour = self.timer.index(self.dict["Time_End"])+3
                 Fill = PatternFill(start_color=self.color[use_color],end_color=self.color[use_color],fill_type="solid")
+                use_color+=1
                 for a in range(0,len(self.head)):
                     if self.dict["Date_Start"] == self.head[a]:
                         for i in range(start_hour, end_hour):
@@ -139,5 +143,5 @@ class Graph():
     #----------------------------------------------------------------   
                 
     
-#g = Graph("กราฟการทำงานของ ABB.xlsx","ABB1")
-#print(g.Poc())
+g = Graph("กราฟการทำงานของ ABB.xlsx","ABB1")
+print(g.Poc())
