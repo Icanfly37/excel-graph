@@ -11,7 +11,7 @@ class Graph():
         self.Sheet = Sheet
         self.loading = [0,0] #(error_state,row_error)
         self.timer = [] #timestamp
-        self.color = ["0000FF00", "00FF99CC", "00FFFF00", "00CCCCFF", "0000FFFF", "00FFCC99"]
+        self.color = ["00FFFF00","00FF99CC","0099CC00","00FF9900","0000FFFF","00CC99FF","0033CCCC","00FF00FF","0099CCFF","00FFCC99","009999FF","00FFFFCC","0000CCFF","00FFCC00","000066CC"]
         self.head = [] #datetimestamp
         self.dict ={}
         
