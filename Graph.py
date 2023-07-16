@@ -11,9 +11,12 @@ class Graph():
         self.Sheet = Sheet
         self.loading = [0,0] #(error_state,row_error)
         self.timer = [] #timestamp
-        self.color = ["00FFFF00","00FF99CC","0099CC00","00FF9900","0000FFFF","00CC99FF","0033CCCC","00FF00FF","0099CCFF","00FFCC99","009999FF","00FFFFCC","0000CCFF","00FFCC00","000066CC"]
+        self.color = ["00FFFF00","00FF99CC","0099CC00","00FF9900","0000FFFF","00CC99FF",
+                      "0033CCCC","00FF00FF","0099CCFF","00FFCC99","009999FF","00FFFFCC",
+                      "0000CCFF","00FFCC00","000066CC"]
         self.head = [] #datetimestamp
         self.dict ={}
+        self.current_color = {}
         
     def Poc(self):
     #------------------- open excel file --------------------------------
@@ -103,9 +106,11 @@ class Graph():
     def fill_cell(self):
         #------------------- Ploting in sheet --------------------------------
         a = 0
-        use_color = 0
+        #use_color = 0
         row_now = 0
         first_time = True
+        first_cell = True
+        #date_value = ""
         #listdate = self.head
         for r in self.wsr.iter_rows(min_row=2):  # Start from the second row
             if first_time is True:
@@ -113,8 +118,8 @@ class Graph():
                 first_time = False
             else:
                 row_now += 1
-            if use_color == len(self.color)-1:
-                use_color = 0
+            #if use_color == len(self.color)-1:
+            #   use_color = 0
             #use_color = random.randint(0,len(self.color)-1)
             round = 1
             #a = 0
@@ -125,6 +130,19 @@ class Graph():
                     self.dict["P_Name"] = cell.value
                 elif round == 2:
                     self.dict["Date_Start"] = cell.value
+                    if first_cell is True:
+                        first_cell = False
+                        self.current_color[cell.value] = 0
+                    else:
+                        if cell.value in self.current_color.keys():
+                            if self.current_color[cell.value] == len(self.color)-1: 
+                                self.current_color[cell.value] = 0
+                            else:
+                                self.current_color[cell.value] += 1
+                        else:
+                            use_color = list(self.current_color.values())[0] #get previous color index
+                            self.current_color.clear() # delete all element in self.current_color
+                            self.current_color[cell.value] = use_color
                 elif round == 3:
                     if type(cell.value) == type(time(10,0)):
                         self.dict["Time_Start"] = cell.value.strftime("%H:%M")
@@ -156,8 +174,9 @@ class Graph():
             else:
                 start_hour = self.timer.index(self.dict["Time_Start"])+2
                 end_hour = self.timer.index(self.dict["Time_End"])+3
-                Fill = PatternFill(start_color=self.color[use_color],end_color=self.color[use_color],fill_type="solid")
-                use_color+=1
+                Fill = PatternFill(start_color=self.color[self.current_color[self.dict["Date_Start"]]],
+                                   end_color=self.color[self.current_color[self.dict["Date_Start"]]],fill_type="solid")
+                #self.current_color[self.dict["Date_Start"]]+=1
                 for a in range(0,len(self.head)):
                     if self.dict["Date_Start"] == self.head[a]:
                         for i in range(start_hour, end_hour):
@@ -168,5 +187,5 @@ class Graph():
     #----------------------------------------------------------------   
                 
     
-#g = Graph("กราฟการทำงานของ ABB.xlsx","TestError")
+#g = Graph("กราฟการทำงานของ ABB.xlsx","ABB1")
 #print(g.Poc())
