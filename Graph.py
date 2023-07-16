@@ -13,7 +13,7 @@ class Graph():
         self.timer = [] #timestamp
         self.color = ["00FFFF00","00FF99CC","0099CC00","00FF9900","0000FFFF","00CC99FF",
                       "0033CCCC","00FF00FF","0099CCFF","00FFCC99","009999FF","00FFFFCC",
-                      "0000CCFF","00FFCC00","000066CC"]
+                      "0000CCFF","00FFCC00"]
         self.head = [] #datetimestamp
         self.dict ={}
         self.current_color = {}
